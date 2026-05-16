@@ -1,0 +1,55 @@
+name: Daily Data Ingestion
+
+on:
+  schedule:
+    # 03:45 UTC is 09:15 AM IST (Indian Standard Time)
+    - cron: '45 3 * * *'
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
+
+permissions:
+  contents: write # Needed to commit back to the repo
+
+jobs:
+  run-ingestion:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip' # cache pip dependencies to speed up runs
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Install Playwright Browsers
+        run: playwright install chromium
+        
+      - name: Run Ingestion Pipeline
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: |
+          python scripts/run_ingestion.py
+          
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Stage new/updated data and vector store files
+          git add data/raw/
+          git add data/vector_store/
+          
+          # Commit only if there are changes
+          if git diff-index --quiet HEAD --; then
+            echo "No new data to commit."
+          else
+            git commit -m "chore: auto-update NAV data and FAISS index [skip ci]"
+            git push
+          fi

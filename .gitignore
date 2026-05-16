@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Environment
+.env
+
+# Data & Index
+data/raw/*.json
+data/vector_store/*.faiss
+data/vector_store/*.pkl
+
+# Logs
+*.log
+ingestion_log.txt
+
+# OS
+.DS_Store
+Thumbs.db
