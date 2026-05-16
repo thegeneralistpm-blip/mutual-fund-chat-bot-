@@ -1,6 +1,16 @@
-# Groww Mutual Fund (MF) Chatbot
+---
+title: Zerodha MF Assistant
+emoji: 🛡️
+colorFrom: blue
+colorTo: green
+sdk: streamlit
+app_file: frontend/app.py
+pinned: false
+---
 
-This repository contains the Phase-wise implementation of the Groww MF Chatbot, an AI-powered assistant built to answer mutual fund queries using a Retrieval-Augmented Generation (RAG) pipeline.
+# Zerodha Mutual Fund (MF) Chatbot
+
+This repository contains the Phase-wise implementation of the Zerodha MF Chatbot, an AI-powered assistant built to answer mutual fund queries using a Retrieval-Augmented Generation (RAG) pipeline.
 
 Currently, **Phase 4** (Production Hardening) is completed.
 The chatbot is now production-ready with agentic capabilities, safety guardrails, and observability.
