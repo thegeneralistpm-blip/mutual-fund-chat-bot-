@@ -2,8 +2,8 @@ name: Daily Data Ingestion
 
 on:
   schedule:
-    # 03:45 UTC is 09:15 AM IST (Indian Standard Time)
-    - cron: '45 3 * * *'
+    # 15:22 UTC is 08:52 PM IST (Indian Standard Time)
+    - cron: '22 15 * * *'
   workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
 
 permissions:
