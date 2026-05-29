@@ -90,8 +90,10 @@ class IngestionPipeline:
         
         # 7. Embedding
         if not os.environ.get("GOOGLE_API_KEY"):
-            logger.error("GOOGLE_API_KEY environment variable not set. Cannot run embedder.")
-            return
+            raise EnvironmentError(
+                "GOOGLE_API_KEY environment variable not set. "
+                "Add it as a GitHub Actions secret or in your .env file."
+            )
             
         logger.info("Generating embeddings and saving to FAISS...")
         try:

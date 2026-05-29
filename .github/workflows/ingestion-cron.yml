@@ -31,6 +31,13 @@ jobs:
       - name: Install Playwright Browsers
         run: playwright install chromium
         
+      - name: Verify secrets
+        run: |
+          if [ -z "${{ secrets.GOOGLE_API_KEY }}" ]; then
+            echo "::error::GOOGLE_API_KEY secret is not set. Please add it in Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+
       - name: Run Ingestion Pipeline
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -43,8 +50,12 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Stage new/updated data and vector store files
-          git add data/raw/
-          git add data/vector_store/
+          git add data/raw/ || true
+          if [ -d "data/vector_store" ]; then
+            git add data/vector_store/
+          else
+            echo "::warning::data/vector_store/ not found — embedding may have been skipped."
+          fi
           
           # Commit only if there are changes
           if git diff-index --quiet HEAD --; then
